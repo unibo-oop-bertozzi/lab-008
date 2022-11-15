@@ -11,3 +11,7 @@ repositories {
 application {
     mainClass.set("it.unibo.mvc.BadIOGUI")
 }
+
+dependencies {
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.7.3")
+}
