@@ -17,6 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -29,11 +31,11 @@ public class BadIOGUI {
 
     private static final String TITLE = "A very simple GUI application";
     private static final String PATH = System.getProperty("user.home")
-            + File.separator
-            + BadIOGUI.class.getSimpleName() + ".txt";
+        + File.separator
+        + BadIOGUI.class.getSimpleName() + ".txt";
     private static final int PROPORTION = 5;
     private final JFrame frame = new JFrame(TITLE);
-
+    private final RandomGenerator randomGenerator = new Random();
     /**
      * Creates a new BadIOGUI.
      */
@@ -60,7 +62,7 @@ public class BadIOGUI {
                  * your UI becomes completely unresponsive.
                  */
                 try (PrintStream ps = new PrintStream(PATH, StandardCharsets.UTF_8)) {
-                    ps.print("RANDOM NUMBER");
+                    ps.print(randomGenerator.nextInt());
                     System.out.println("WRITE"); // NOPMD: allowed as this is just an exercise
                 } catch (IOException e1) {
                     JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);

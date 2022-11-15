@@ -53,10 +53,17 @@ public final class SimpleGUIWithFileChooser {
         browse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
+                try {
+                    JFileChooser chooser = new JFileChooser();
                 int returnVal = chooser.showSaveDialog(frame);
                 if(returnVal == JFileChooser.APPROVE_OPTION) { 
+                    ctrl.setCurrentFile(chooser.getSelectedFile());
                 }
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    JOptionPane.showMessageDialog();
+                }
+                
             }
         });
     private void display() {
