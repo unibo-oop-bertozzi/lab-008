@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 
@@ -32,18 +33,19 @@ public class BadIOGUI {
             + File.separator
             + BadIOGUI.class.getSimpleName() + ".txt";
     private static final int PROPORTION = 5;
-    private final Random randomGenerator = new Random();
     private final JFrame frame = new JFrame(TITLE);
 
     /**
      * Creates a new BadIOGUI.
      */
     public BadIOGUI() {
-        final JPanel canvas = new JPanel();
-        canvas.setLayout(new BorderLayout());
+        final JPanel newJPanel = new JPanel();
+        newJPanel.setLayout(new BoxLayout(newJPanel, BoxLayout.X_AXIS));
         final JButton write = new JButton("Write on file");
-        canvas.add(write, BorderLayout.CENTER);
-        frame.setContentPane(canvas);
+        newJPanel.add(write, BorderLayout.EAST);
+        final JButton read = new JButton("Read on file");
+        newJPanel.add(read, BorderLayout.WEST);
+        frame.setContentPane(newJPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /*
          * Handlers
@@ -59,11 +61,27 @@ public class BadIOGUI {
                  * your UI becomes completely unresponsive.
                  */
                 try (PrintStream ps = new PrintStream(PATH, StandardCharsets.UTF_8)) {
-                    ps.print(randomGenerator.nextInt());
+                    ps.print("RANDOM NUMBER");
+                    System.out.println("WRITE");
                 } catch (IOException e1) {
                     JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);
                     e1.printStackTrace(); // NOPMD: allowed as this is just an exercise
                 }
+            }
+        });
+        read.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                try  {
+                    final List<String> lines = Files.readAllLines(Paths.get(PATH), StandardCharsets.UTF_8);
+                    for (String line : lines) {
+                        System.out.println(line);
+                    }
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);
+                    e1.printStackTrace(); // NOPMD: allowed as this is just an exercise
+                }
+                
             }
         });
     }
@@ -86,6 +104,7 @@ public class BadIOGUI {
          * flag makes the OS window manager take care of the default positioning
          * on screen. Results may vary, but it is generally the best choice.
          */
+        frame.pack();
         frame.setLocationByPlatform(true);
         /*
          * OK, ready to push the frame onscreen
