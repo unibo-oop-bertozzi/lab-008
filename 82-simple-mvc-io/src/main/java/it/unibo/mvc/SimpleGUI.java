@@ -21,8 +21,11 @@ public final class SimpleGUI {
 
     private static final int PROPORTION = 5;
     private final JFrame frame = new JFrame();
+    /**
+     * @param ctrl
+     */
     public SimpleGUI(final Controller ctrl) {
-        final JPanel newJPanel = new JPanel();   
+        final JPanel newJPanel = new JPanel(); 
         newJPanel.setLayout(new BorderLayout());
         final JTextArea textArea = new JTextArea();
         newJPanel.add(textArea, BorderLayout.CENTER);
@@ -34,9 +37,9 @@ public final class SimpleGUI {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    ctrl.WriteFIle(textArea.getText());
-                } catch (IOException IOE) {
-                    JOptionPane.showMessageDialog(frame, IOE, "Error", JOptionPane.ERROR_MESSAGE);
+                    ctrl.writeFile(textArea.getText());
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(frame, ioe, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -66,6 +69,9 @@ public final class SimpleGUI {
          */
         frame.setVisible(true);
     }
+        /**
+         * @param args
+         */
         public static void main(final String... args) {
         new SimpleGUI(new Controller()).display();
      }

@@ -8,8 +8,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileFilter;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -24,8 +22,11 @@ public final class SimpleGUIWithFileChooser {
 
     private static final int PROPORTION = 4;
     private final JFrame frame = new JFrame();
+    /**
+     * @param ctrl
+     */
     public SimpleGUIWithFileChooser(final Controller ctrl) {
-        final JPanel newJPanel = new JPanel();   
+        final JPanel newJPanel = new JPanel();
         newJPanel.setLayout(new BorderLayout());
         final JTextArea textArea = new JTextArea();
         newJPanel.add(textArea, BorderLayout.CENTER);
@@ -35,37 +36,35 @@ public final class SimpleGUIWithFileChooser {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    ctrl.WriteFIle(textArea.getText());
-                } catch (IOException IOE) {
-                    JOptionPane.showMessageDialog(frame, IOE, "Error", JOptionPane.ERROR_MESSAGE);
+                    ctrl.writeFile(textArea.getText());
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(frame, ex, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-        final JPanel topPanel = new JPanel();   
+        final JPanel topPanel = new JPanel();
         final JTextField textField = new JTextField(ctrl.getPath());
-        final JFileChooser browse = new JFileChooser("Browse...");
+        final JButton browse = new JButton("Browse...");
         topPanel.add(textField, BorderLayout.CENTER);
         textField.setEditable(false);
         topPanel.add(browse, BorderLayout.LINE_END);
-        newJPanel.add(topPanel,BorderLayout.NORTH);
+        newJPanel.add(topPanel, BorderLayout.NORTH);
         frame.setContentPane(newJPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         browse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                try {
-                    JFileChooser chooser = new JFileChooser();
-                int returnVal = chooser.showSaveDialog(frame);
-                if(returnVal == JFileChooser.APPROVE_OPTION) { 
+                final JFileChooser chooser = new JFileChooser();
+                final int returnVal = chooser.showSaveDialog(frame);
+                if (returnVal == JFileChooser.APPROVE_OPTION) { 
                     ctrl.setCurrentFile(chooser.getSelectedFile());
+                    textField.setText(ctrl.getPath());
+                } else if (returnVal != JFileChooser.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(textField, browse);
                 }
-                } catch (Exception e) {
-                    // TODO: handle exception
-                    JOptionPane.showMessageDialog();
-                }
-                
             }
         });
+    }
     private void display() {
         /*
          * Make the frame one fifth the resolution of the screen. This very method is
@@ -90,6 +89,9 @@ public final class SimpleGUIWithFileChooser {
          */
         frame.setVisible(true);
     }
+        /**
+         * @param args
+         */
         public static void main(final String... args) {
         new SimpleGUIWithFileChooser(new Controller()).display();
      }

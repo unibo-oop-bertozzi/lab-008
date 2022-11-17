@@ -12,21 +12,34 @@ public class Controller {
     private static final String PATH = System.getProperty("user.home")
             + System.getProperty("file.separator")
             + "output.txt";
-    File FILE;
+    private File file;
     Controller() {
-        this.FILE=new File(FILE, PATH);
+        this.file = new File(PATH);
     }
+    /**
+     * @param file
+     */
     public void setCurrentFile(final File file) {
-        this.FILE=file;
+        this.file = file;
     }
+    /**
+     * @return getfile
+     */
     public File getFILE() {
-        return FILE;
+        return file;
     }
-    public String getPath(){
-        return FILE.getPath();
+    /**
+     * @return getpath
+     */
+    public String getPath() {
+        return file.getPath();
     }
-    public void WriteFIle(String write) throws IOException {
-        try (PrintStream ps = new PrintStream(FILE.getPath(), StandardCharsets.UTF_8)) {
+    /**
+     * @param write
+     * @throws IOException
+     */
+    public void writeFile(final String write) throws IOException {
+        try (PrintStream ps = new PrintStream(file.getPath(), StandardCharsets.UTF_8)) {
             ps.print(write);
         }
     }
